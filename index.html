@@ -7,11 +7,7 @@
 
 <style>
 /* ===== RESET ===== */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
 /* ===== INTRO ===== */
 .intro {
@@ -26,76 +22,131 @@
     animation-delay: 6s;
 }
 
-.intro.hidden {
-    display: none;
-}
+.intro.hidden { display: none; }
 
 .intro-content {
     text-align: center;
     font-family: Consolas, monospace;
-    color: #22d3ee;
 }
 
 .welcome {
+    color: #22d3ee;
     font-size: 2rem;
     letter-spacing: 4px;
     opacity: 0;
     animation: fadeIn 1.5s ease forwards;
 }
 
+.gov {
+    margin-top: 10px;
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: #9ca3af;
+    opacity: 0;
+    animation: fadeIn 1.5s ease forwards;
+    animation-delay: 1s;
+}
+
 .omega {
     font-size: 6rem;
-    margin-top: 20px;
+    margin-top: 18px;
     color: #f97316;
-    text-shadow:
-        0 0 10px #f97316,
-        0 0 30px rgba(249, 115, 22, 0.8);
+    text-shadow: 0 0 10px #f97316, 0 0 30px rgba(249,115,22,.8);
     opacity: 0;
     animation: glitchIn 2s ease forwards;
     animation-delay: 2.5s;
 }
 
+/* ===== TERMINAL ===== */
+body {
+    min-height: 100vh;
+    background: radial-gradient(circle at top, #0f172a 0, #020617 40%, #000 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Consolas, monospace;
+    color: #e5e7eb;
+}
+
+.terminal {
+    width: 90%;
+    max-width: 600px;
+    background: rgba(15, 23, 42, 0.95);
+    border: 1px solid #22d3ee;
+    box-shadow: 0 0 25px rgba(34, 211, 238, 0.4);
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.terminal-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #9ca3af;
+    margin-bottom: 12px;
+}
+
+.title {
+    color: #f97316;
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.story, .hint {
+    font-size: 14px;
+    margin-bottom: 12px;
+}
+
+.hint {
+    border-left: 3px solid #22d3ee;
+    padding-left: 8px;
+    color: #a5b4fc;
+}
+
+.input-row {
+    display: flex;
+    gap: 8px;
+}
+
+input {
+    flex: 1;
+    padding: 8px;
+    background: #020617;
+    border: 1px solid #22d3ee;
+    color: #e5e7eb;
+}
+
+button {
+    padding: 8px 14px;
+    background: #22d3ee;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.feedback {
+    margin-top: 10px;
+    font-size: 13px;
+}
+
+.ok { color: #4ade80; }
+.error { color: #f97316; }
+
 /* ===== ANIMAÇÕES ===== */
-@keyframes fadeIn {
-    to { opacity: 1; }
+@keyframes fadeIn { to { opacity: 1; } }
+
+@keyframes fadeOut {
+    to { opacity: 0; visibility: hidden; }
 }
 
 @keyframes glitchIn {
-    0% {
-        opacity: 0;
-        transform: scale(0.8);
-        text-shadow: none;
-    }
-    40% {
-        opacity: 1;
-        text-shadow: 2px 0 red, -2px 0 cyan;
-    }
-    70% {
-        text-shadow: -2px 0 red, 2px 0 cyan;
-    }
+    0% { opacity: 0; transform: scale(.85); text-shadow: none; }
+    50% { opacity: 1; text-shadow: 2px 0 red, -2px 0 cyan; }
     100% {
         opacity: 1;
         transform: scale(1);
-        text-shadow:
-            0 0 10px #f97316,
-            0 0 30px rgba(249, 115, 22, 0.8);
+        text-shadow: 0 0 10px #f97316, 0 0 30px rgba(249,115,22,.8);
     }
-}
-
-@keyframes fadeOut {
-    to {
-        opacity: 0;
-        visibility: hidden;
-    }
-}
-
-/* ===== CONTEÚDO DO SITE ===== */
-#site {
-    min-height: 100vh;
-    background: #020617;
-    color: #e5e7eb;
-    font-family: Arial, sans-serif;
-    padding: 40px;
 }
 </style>
 </head>
@@ -106,28 +157,72 @@
 <div id="intro" class="intro">
     <div class="intro-content">
         <div class="welcome">BEM-VINDO</div>
+        <div class="gov">GOVERNO DE SÃO PAULO</div>
         <div class="omega">Ω</div>
     </div>
 </div>
 
-<!-- SITE NORMAL -->
-<div id="site">
-    <h1>SP Omega</h1>
-    <p>Terminal operacional ativo.</p>
+<!-- TERMINAL / PUZZLE -->
+<div class="terminal">
+    <div class="terminal-header">
+        <span>SP Ω // SECURE NODE</span>
+        <span>ALPHA ACCESS</span>
+    </div>
+
+    <h1 class="title">TERMINAL DE ACESSO</h1>
+
+    <p class="story">
+        Um terminal da corporação SP Omega aguarda autenticação.
+    </p>
+
+    <p class="hint">
+        Dica: palavra-chave da corporação + resposta para tudo no universo.<br>
+        Formato: <code>PALAVRA-XX</code>
+    </p>
+
+    <div class="input-row">
+        <input id="answer" placeholder="OMEGA-42" autocomplete="off">
+        <button onclick="checkAnswer()">ENVIAR</button>
+    </div>
+
+    <p id="feedback" class="feedback"></p>
 </div>
 
 <script>
 const INTRO_KEY = "spomega_intro_seen";
+const PUZZLE_KEY = "spomega_puzzle1";
+const SECRET = "OMEGA-42";
 
 window.addEventListener("DOMContentLoaded", () => {
     const intro = document.getElementById("intro");
-
     if (localStorage.getItem(INTRO_KEY)) {
         intro.classList.add("hidden");
     } else {
         localStorage.setItem(INTRO_KEY, "true");
     }
+
+    if (localStorage.getItem(PUZZLE_KEY)) {
+        document.getElementById("feedback").textContent =
+            "Este terminal já foi destravado anteriormente.";
+        document.getElementById("feedback").className = "feedback ok";
+        document.getElementById("answer").disabled = true;
+    }
 });
+
+function checkAnswer() {
+    const value = document.getElementById("answer").value.trim().toUpperCase();
+    const feedback = document.getElementById("feedback");
+
+    if (value === SECRET) {
+        localStorage.setItem(PUZZLE_KEY, "solved");
+        feedback.textContent = "ACESSO CONCEDIDO. TERMINAL DESBLOQUEADO.";
+        feedback.className = "feedback ok";
+        document.getElementById("answer").disabled = true;
+    } else {
+        feedback.textContent = "ACESSO NEGADO.";
+        feedback.className = "feedback error";
+    }
+}
 </script>
 
 </body>

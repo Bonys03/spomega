@@ -2,15 +2,213 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Meu Site no GitHub Pages</title>
-    <link rel="stylesheet" href="style.css">
+    <title>SP Omega - Terminal de Acesso</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Consolas, "Courier New", monospace;
+            background: radial-gradient(circle at top, #0f172a 0, #020617 40%, #000 100%);
+            color: #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .terminal {
+            width: 90%;
+            max-width: 600px;
+            background: rgba(15, 23, 42, 0.95);
+            border: 1px solid #22d3ee;
+            box-shadow: 0 0 25px rgba(34, 211, 238, 0.4);
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .terminal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            font-size: 12px;
+            color: #9ca3af;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: #22c55e;
+            box-shadow: 0 0 10px #22c55e;
+            margin-right: 6px;
+        }
+
+        .title {
+            font-size: 20px;
+            margin: 0 0 10px;
+            color: #f97316;
+            text-shadow: 0 0 8px rgba(249, 115, 22, 0.8);
+        }
+
+        .story {
+            font-size: 14px;
+            line-height: 1.4;
+            margin-bottom: 16px;
+        }
+
+        .hint {
+            font-size: 13px;
+            color: #a5b4fc;
+            border-left: 3px solid #22d3ee;
+            padding-left: 8px;
+            margin-bottom: 16px;
+        }
+
+        label {
+            font-size: 13px;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 8px 10px;
+            border-radius: 4px;
+            border: 1px solid #22d3ee;
+            background: #020617;
+            color: #e5e7eb;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            box-shadow: 0 0 8px rgba(34, 211, 238, 0.6);
+        }
+
+        button {
+            padding: 8px 14px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: bold;
+            background: #22d3ee;
+            color: #020617;
+        }
+
+        button:hover {
+            filter: brightness(1.1);
+        }
+
+        .feedback {
+            font-size: 13px;
+            min-height: 18px;
+        }
+
+        .feedback.ok {
+            color: #4ade80;
+        }
+
+        .feedback.error {
+            color: #f97316;
+        }
+
+        .small {
+            font-size: 11px;
+            color: #6b7280;
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
-    <h1>🚀 Meu Site no GitHub Pages</h1>
-    <p>Site funcionando com sucesso!</p>
 
-    <button onclick="mostrarMensagem()">Clique aqui</button>
+<div class="terminal">
+    <div class="terminal-header">
+        <div style="display:flex;align-items:center;">
+            <div class="status-dot"></div>
+            <span>SP Ω // SECURE NODE #013</span>
+        </div>
+        <span>ACCESS LEVEL: ALPHA</span>
+    </div>
 
-    <script src="script.js"></script>
+    <h1 class="title">TERMINAL DE ACESSO</h1>
+
+    <p class="story">
+        Você encontra um terminal da corporação <strong>SP Omega</strong>.
+        Para destravar a próxima área, é preciso digitar o <strong>código de acesso</strong>.
+    </p>
+
+    <p class="hint">
+        <strong>Dica:</strong> use a palavra-chave da corporação + a resposta para tudo no universo, segundo um certo autor de ficção.
+        <br>
+        Formato esperado: <code>PALAVRA-XX</code>
+    </p>
+
+    <label for="answer">Insira o código de acesso:</label>
+    <div class="input-row">
+        <input type="text" id="answer" placeholder="Ex.: OMEGA-42" autocomplete="off">
+        <button type="button" onclick="checkAnswer()">ENVIAR</button>
+    </div>
+
+    <p id="feedback" class="feedback"></p>
+
+    <p class="small">
+        Progresso é salvo neste dispositivo. Se você já tiver destravado este terminal, ele ficará desbloqueado ao recarregar a página.
+    </p>
+</div>
+
+<script>
+    const SECRET_CODE = "OMEGA-42";
+    const STORAGE_KEY = "spomega_puzzle1";
+
+    function checkAnswer() {
+        const input = document.getElementById("answer");
+        const feedback = document.getElementById("feedback");
+
+        const value = input.value.trim().toUpperCase();
+
+        if (value === "") {
+            feedback.textContent = "O terminal aguarda um código...";
+            feedback.className = "feedback error";
+            return;
+        }
+
+        if (value === SECRET_CODE) {
+            feedback.textContent = "ACESSO CONCEDIDO. O terminal da SP Omega é destravado.";
+            feedback.className = "feedback ok";
+            localStorage.setItem(STORAGE_KEY, "solved");
+            input.disabled = true;
+        } else {
+            feedback.textContent = "ACESSO NEGADO. Nada acontece. Talvez o código esteja incorreto.";
+            feedback.className = "feedback error";
+        }
+    }
+
+    // Ao carregar a página, verifica se o puzzle já foi resolvido neste navegador
+    window.addEventListener("DOMContentLoaded", () => {
+        const input = document.getElementById("answer");
+        const feedback = document.getElementById("feedback");
+
+        const solved = localStorage.getItem(STORAGE_KEY);
+
+        if (solved === "solved") {
+            feedback.textContent = "Este terminal já foi destravado anteriormente neste dispositivo.";
+            feedback.className = "feedback ok";
+            input.disabled = true;
+        }
+    });
+</script>
+
 </body>
 </html>

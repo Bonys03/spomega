@@ -11,6 +11,10 @@
             background: #0A0A1A;
             color: #AEEBFF;
             padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .terminal {
@@ -93,6 +97,13 @@
 
             document.getElementById("cmd").value = "";
         }
+        const input = document.getElementById("cmd");
+
+        input.addEventListener("keydown", function (e) {
+            if (e.key === "Enter") {
+                run();
+            }
+        });
     </script>
 
 </body>

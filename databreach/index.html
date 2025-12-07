@@ -1,251 +1,214 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <title>SP Omega — Data Breach</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>SP Omega — Data Breach</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
+<style>
+* { box-sizing: border-box; }
 
-        body {
-            margin: 0;
-            min-height: 100vh;
-            background: radial-gradient(circle at top, #020617 0%, #000 75%);
-            color: #e5e7eb;
-            font-family: Consolas, monospace;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: radial-gradient(circle at top, #020617 0%, #000 75%);
+    color: #e5e7eb;
+    font-family: Consolas, monospace;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
-        .locked {
-            text-align: center;
-            color: #f97316;
-        }
+.container {
+    width: 90%;
+    max-width: 740px;
+    background: rgba(15, 23, 42, 0.95);
+    border: 1px solid #22d3ee;
+    box-shadow: 0 0 25px rgba(34,211,238,.4);
+    border-radius: 10px;
+    padding: 20px;
+}
 
-        .container {
-            width: 90%;
-            max-width: 720px;
-            background: rgba(15, 23, 42, 0.95);
-            border: 1px solid #22d3ee;
-            box-shadow: 0 0 25px rgba(34,211,238,.4);
-            border-radius: 10px;
-            padding: 20px;
-        }
+.locked { text-align: center; color: #f97316; }
 
-        h1 {
-            color: #22d3ee;
-            margin-bottom: 6px;
-        }
+h1 { color: #22d3ee; margin-bottom: 6px; }
 
-        .story {
-            font-size: 14px;
-            margin-bottom: 14px;
-        }
+.story { font-size: 14px; margin-bottom: 14px; }
 
-        .program {
-            margin-bottom: 14px;
-        }
+.program {
+    margin-bottom: 14px;
+}
 
-        .program-name {
-            display: flex;
-            justify-content: space-between;
-            font-size: 13px;
-        }
+.program-name {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+}
 
-        .bar {
-            background: #020617;
-            border: 1px solid #22d3ee;
-            height: 16px;
-            border-radius: 8px;
-            overflow: hidden;
-            margin-top: 6px;
-        }
+.bar {
+    background: #020617;
+    border: 1px solid #22d3ee;
+    height: 16px;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-top: 6px;
+}
 
-        .used {
-            height: 100%;
-            background: linear-gradient(90deg,#22d3ee,#f97316);
-            transition: width .3s;
-        }
+.used {
+    height: 100%;
+    background: linear-gradient(90deg,#22d3ee,#f97316);
+    transition: width .3s;
+}
 
-        .controls {
-            display: flex;
-            gap: 6px;
-            margin-top: 6px;
-        }
+.controls {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
 
-        select, input, button {
-            padding: 6px;
-            background: #020617;
-            border: 1px solid #22d3ee;
-            color: #e5e7eb;
-            font-family: Consolas, monospace;
-        }
+select, button {
+    padding: 6px;
+    background: #020617;
+    border: 1px solid #22d3ee;
+    color: #e5e7eb;
+    font-family: Consolas, monospace;
+    cursor: pointer;
+}
 
-        button {
-            cursor: pointer;
-            font-weight: bold;
-        }
+button.dump {
+    border-color: #f97316;
+    color: #f97316;
+}
 
-        .feedback {
-            min-height: 18px;
-            font-size: 13px;
-            margin-top: 10px;
-        }
+.feedback {
+    min-height: 18px;
+    font-size: 13px;
+    margin-top: 10px;
+}
 
-        .ok {
-            color: #4ade80;
-        }
-
-        .error {
-            color: #f97316;
-        }
-    </style>
+.ok { color: #4ade80; }
+.error { color: #f97316; }
+</style>
 </head>
 
 <body>
 
-    <div id="locked" class="locked" style="display:none;">
-        <h1>ACESSO BLOQUEADO</h1>
-        <p>Terminal principal da SP Omega não autenticado.</p>
-    </div>
+<div id="locked" class="locked" style="display:none;">
+    <h1>ACESSO BLOQUEADO</h1>
+    <p>Terminal principal não autenticado.</p>
+</div>
 
-    <div id="puzzle" class="container" style="display:none;">
+<div id="puzzle" class="container" style="display:none;">
 
-        <h1>DATA BREACH</h1>
-        <p class="story">
-            A memória do sistema está concentrada no módulo errado.
-            Transfira blocos de RAM entre programas sem causar overflow.
-            <br><br>
-            <strong>Objetivo:</strong> deixar o <em>Data Breacher</em> com exatamente <strong>6 TB</strong>.
-        </p>
+<h1>DATA BREACH</h1>
+<p class="story">
+A memória está concentrada no local errado.<br>
+Transfira blocos completos entre programas ou descarte buffers.
+<br><br>
+<strong>Objetivo:</strong> deixar o <em>Data Breacher</em> com <strong>6 TB</strong>.
+</p>
 
-        <div id="programs"></div>
+<div id="programs"></div>
 
-        <div class="controls">
-            <select id="from"></select>
-            <select id="to"></select>
-            <input id="amount" type="number" min="1" value="1"> TB
-            <button onclick="transfer()">TRANSFERIR</button>
-        </div>
+<div class="controls">
+    <select id="from"></select>
+    <select id="to"></select>
+    <button onclick="transfer()">TRANSFERIR</button>
+    <button class="dump" onclick="dump()">DUMP</button>
+</div>
 
-        <p id="feedback" class="feedback"></p>
+<p id="feedback" class="feedback"></p>
 
-    </div>
+</div>
 
-    <script>
-        /* ===== CHAVES ===== */
-        const TERMINAL_KEY = "spomega_puzzle1";
-        const DATA_KEY = "spomega_databreach";
+<script>
+/* ===== KEYS ===== */
+const TERMINAL_KEY = "spomega_puzzle1";
+const DATA_KEY = "spomega_databreach";
 
-        /* ===== CONFIG ===== */
-        const PROGRAMS = [
-            { name: "Data Breacher", max: 12, value: 12 },
-            { name: "Kernel Protector", max: 8, value: 0 },
-            { name: "Firewall Powered AI", max: 5, value: 0 }
-        ];
+/* ===== PROGRAMS ===== */
+const PROGRAMS = [
+    { name: "Data Breacher", max: 12, value: 12 },
+    { name: "Kernel Protector", max: 8, value: 0 },
+    { name: "Firewall Powered AI", max: 5, value: 0 }
+];
 
-        const TARGET = 6;
+const TARGET = 6;
 
-        /* ===== ACESSO ===== */
-        if (!localStorage.getItem(TERMINAL_KEY)) {
-            document.getElementById("locked").style.display = "block";
-        } else {
-            document.getElementById("puzzle").style.display = "block";
-        }
+/* ===== ACCESS ===== */
+if (!localStorage.getItem(TERMINAL_KEY)) {
+    document.getElementById("locked").style.display = "block";
+} else {
+    document.getElementById("puzzle").style.display = "block";
+}
 
-        /* ===== UI ===== */
-        const progDiv = document.getElementById("programs");
-        const fromSel = document.getElementById("from");
-        const toSel = document.getElementById("to");
+/* ===== UI ===== */
+const progDiv = document.getElementById("programs");
+const fromSel = document.getElementById("from");
+const toSel = document.getElementById("to");
 
-        PROGRAMS.forEach((p, i) => {
-            progDiv.innerHTML += `
-            <div class="program">
-                <div class="program-name">
-                    <span>${p.name}</span>
-                    <span><strong>${p.value}</strong> / ${p.max} TB</span>
-                </div>
-                <div class="bar">
-                    <div class="used" id="bar-${i}"></div>
-                </div>
+PROGRAMS.forEach((p, i) => {
+    progDiv.innerHTML += `
+        <div class="program">
+            <div class="program-name">
+                <span>${p.name}</span>
+                <span><strong>${p.value}</strong> / ${p.max} TB</span>
             </div>
-        `;
+            <div class="bar">
+                <div class="used" id="bar-${i}"></div>
+            </div>
+        </div>
+    `;
+    fromSel.innerHTML += `<option value="${i}">${p.name}</option>`;
+    toSel.innerHTML += `<option value="${i}">${p.name}</option>`;
+});
 
-            fromSel.innerHTML += `<option value="${i}">${p.name}</option>`;
-            toSel.innerHTML += `<option value="${i}">${p.name}</option>`;
-        });
+function render() {
+    PROGRAMS.forEach((p, i) => {
+        document.getElementById(`bar-${i}`).style.width =
+            (p.value / p.max) * 100 + "%";
+        progDiv.children[i].querySelector("strong").textContent = p.value;
+    });
+}
 
-        function render() {
-            PROGRAMS.forEach((p, i) => {
-                document.querySelector(`#bar-${i}`).style.width =
-                    (p.value / p.max) * 100 + "%";
+/* ===== POUR ===== */
+function transfer() {
+    const from = +fromSel.value;
+    const to = +toSel.value;
+    const feedback = document.getElementById("feedback");
 
-                progDiv.children[i].querySelector("strong").textContent = p.value;
-            });
-        }
+    if (from === to) return error("TRANSFERÊNCIA INVÁLIDA.");
 
-        /* ===== TRANSFERÊNCIA ===== */
-        function transfer() {
-            const from = Number(fromSel.value);
-            const to = Number(toSel.value);
-            const amount = Number(document.getElementById("amount").value);
-            const feedback = document.getElementById("feedback");
+    const src = PROGRAMS[from];
+    const dst = PROGRAMS[to];
 
-            feedback.textContent = "";
-            feedback.className = "feedback";
+    if (src.value === 0) return error("ORIGEM VAZIA.");
 
-            if (from === to) {
-                error("TRANSFERÊNCIA INVÁLIDA.");
-                return;
-            }
+    const space = dst.max - dst.value;
+    if (space === 0) return error("DESTINO JÁ ESTÁ CHEIO.");
 
-            if (amount <= 0) {
-                error("VALOR INVÁLIDO.");
-                return;
-            }
+    const moved = Math.min(src.value, space);
 
-            const src = PROGRAMS[from];
-            const dst = PROGRAMS[to];
+    src.value -= moved;
+    dst.value += moved;
 
-            if (src.value < amount) {
-                error("MEMÓRIA INSUFICIENTE NA ORIGEM.");
-                return;
-            }
+    render();
+    checkWin();
+}
 
-            if (dst.value + amount > dst.max) {
-                error("OVERFLOW DETECTADO NO DESTINO.");
-                return;
-            }
+/* ===== DUMP ===== */
+function dump() {
+    const from = +fromSel.value;
+    const src = PROGRAMS[from];
 
-            src.value -= amount;
-            dst.value += amount;
+    if (src.value === 0) return error("PROGRAMA JÁ ESTÁ VAZIO.");
 
-            render();
-            checkWin();
-        }
+    src.value = 0;
+    render();
+    checkWin();
+}
 
-        function checkWin() {
-            const feedback = document.getElementById("feedback");
-            if (PROGRAMS[0].value === TARGET) {
-                localStorage.setItem(DATA_KEY, "solved");
-                feedback.textContent =
-                    "DATA BREACH CONCLUÍDO. O SISTEMA FOI COMPROMETIDO.";
-                feedback.className = "feedback ok";
-            }
-        }
-
-        function error(msg) {
-            const f = document.getElementById("feedback");
-            f.textContent = msg;
-            f.className = "feedback error";
-        }
-
-        render();
-    </script>
-
-</body>
-</html>
+/* ===== CHECK WIN ===== */
+function checkWin() {
+    const feedback =

@@ -112,11 +112,17 @@ Transfira blocos completos entre programas ou descarte buffers.
 <div id="programs"></div>
 
 <div class="controls">
+    <!-- TRANSFERÊNCIA -->
     <select id="from"></select>
+    <span>→</span>
     <select id="to"></select>
     <button onclick="transfer()">TRANSFERIR</button>
+
+    <!-- DUMP -->
+    <select id="dumpTarget"></select>
     <button class="dump" onclick="dump()">DUMP</button>
 </div>
+
 
 <p id="feedback" class="feedback"></p>
 
@@ -147,6 +153,7 @@ if (!localStorage.getItem(TERMINAL_KEY)) {
 const progDiv = document.getElementById("programs");
 const fromSel = document.getElementById("from");
 const toSel = document.getElementById("to");
+const dumpSel = document.getElementById("dumpTarget");
 
 PROGRAMS.forEach((p, i) => {
     progDiv.innerHTML += `
@@ -162,6 +169,7 @@ PROGRAMS.forEach((p, i) => {
     `;
     fromSel.innerHTML += `<option value="${i}">${p.name}</option>`;
     toSel.innerHTML += `<option value="${i}">${p.name}</option>`;
+    dumpSel.innerHTML += `<option value="${i}">${p.name}</option>`;
 });
 
 function render() {
@@ -199,10 +207,12 @@ function transfer() {
 
 /* ===== DUMP ===== */
 function dump() {
-    const from = +fromSel.value;
-    const src = PROGRAMS[from];
+    const index = +dumpSel.value;
+    const src = PROGRAMS[index];
 
-    if (src.value === 0) return error("PROGRAMA JÁ ESTÁ VAZIO.");
+    if (src.value === 0) {
+        return error("PROGRAMA JÁ ESTÁ VAZIO.");
+    }
 
     src.value = 0;
     render();

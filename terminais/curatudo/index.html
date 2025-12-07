@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>CURA-TUDO — Terminal Médico</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 0;
+            font-family: Consolas, monospace;
+            background: #0A0A1A;
+            color: #AEEBFF;
+            padding: 20px;
+        }
+
+        .terminal {
+            border: 1px solid #AEEBFF;
+            background: rgba(20,30,50,.85);
+            padding: 20px;
+            max-width: 800px;
+            margin: auto;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(174,235,255,.3);
+        }
+
+        .line {
+            margin: 8px 0;
+            white-space: pre-wrap;
+        }
+
+        .input-area {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        input {
+            flex: 1;
+            padding: 8px;
+            background: #0A0F20;
+            border: 1px solid #AEEBFF;
+            color: #D4F9FF;
+        }
+
+        button {
+            padding: 8px 12px;
+            border: 1px solid #AEEBFF;
+            background: #0B0D19;
+            color: #AEEBFF;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="terminal">
+        <div class="line">CURA-TUDO v9.6 — Terminal de Análise Clínica</div>
+        <div class="line">Escaneando biometria...</div>
+        <div class="line">Carregando histórico médico...</div>
+        <div class="line" id="out"></div>
+
+        <div class="input-area">
+            <input id="cmd" placeholder="Digite um comando (ajuda)">
+            <button onclick="run()">EXECUTAR</button>
+        </div>
+    </div>
+
+    <script>
+        function run() {
+            let result = document.getElementById("out");
+            let cmd = document.getElementById("cmd").value.trim().toLowerCase();
+
+            if (cmd === "ajuda") {
+                result.textContent = "Comandos: diagnostico, pacientes, laboratorio, segredos, desligar";
+            }
+            else if (cmd === "diagnostico") {
+                result.textContent = "Nenhuma anomalia detectada. (Erro interno: múltiplas anomalias mascaradas.)";
+            }
+            else if (cmd === "pacientes") {
+                result.textContent = "Últimos registros: 12 entradas… 8 delas apagadas.";
+            }
+            else if (cmd === "laboratorio") {
+                result.textContent = "Laboratórios ativos: Genômico, Paradoxal, Biomodulação.";
+            }
+            else if (cmd === "segredos") {
+                result.textContent = "ACESSO NEGADO — autorização nível ÔMEGA-Central requerida.";
+            }
+            else if (cmd === "desligar") {
+                result.textContent = "Encerrando terminal médico…";
+            }
+            else {
+                result.textContent = "Comando inválido.";
+            }
+
+            document.getElementById("cmd").value = "";
+        }
+    </script>
+
+</body>
+</html>

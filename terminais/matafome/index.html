@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>MATA-FOME INDUSTRIAL — Terminal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 0;
+            font-family: Consolas, monospace;
+            background: #001300;
+            color: #7CFF6D;
+            padding: 20px;
+        }
+
+        .terminal {
+            border: 1px solid #7CFF6D;
+            background: rgba(0,20,0,.8);
+            padding: 20px;
+            max-width: 800px;
+            margin: auto;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(124,255,109,.4);
+        }
+
+        .line {
+            margin: 8px 0;
+            white-space: pre-wrap;
+        }
+
+        .input-area {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        input {
+            flex: 1;
+            padding: 8px;
+            background: #020;
+            border: 1px solid #7CFF6D;
+            color: #DFFFD9;
+        }
+
+        button {
+            padding: 8px 12px;
+            border: 1px solid #7CFF6D;
+            background: #001300;
+            color: #7CFF6D;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="terminal">
+        <div class="line">MATA-FOME OS 5.1 — Sistema Alimentício Urbano</div>
+        <div class="line">Carregando catálogos de produtos...</div>
+        <div class="line">Sincronizando linhas de produção...</div>
+        <div class="line" id="result"></div>
+
+        <div class="input-area">
+            <input id="cmd" placeholder="Digite um comando (ajuda)">
+            <button onclick="run()">EXECUTAR</button>
+        </div>
+    </div>
+
+    <script>
+        function run() {
+            let out = document.getElementById("result");
+            let cmd = document.getElementById("cmd").value.trim().toLowerCase();
+
+            switch (cmd) {
+                case "ajuda":
+                    out.textContent = "Comandos: estoque, calorias, segredos, recall, desligar";
+                    break;
+                case "estoque":
+                    out.textContent = "ESTOQUE: barrinhas sintéticas, carne impressa, água MF-02.";
+                    break;
+                case "calorias":
+                    out.textContent = "As calorias dos produtos foram padronizadas a 550 kcal.";
+                    break;
+                case "recall":
+                    out.textContent = "Alerta: 2 lotes apresentam contaminação leve.";
+                    break;
+                case "segredos":
+                    out.textContent = "Acesso negado: restrito ao corpo executivo.";
+                    break;
+                case "desligar":
+                    out.textContent = "Sistema alimentício encerrado.";
+                    break;
+                default:
+                    out.textContent = "Comando inválido.";
+            }
+
+            document.getElementById("cmd").value = "";
+        }
+    </script>
+
+</body>
+</html>

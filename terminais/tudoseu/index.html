@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>TUDOSEU TECNOLOGIAS — Terminal Corporativo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 0;
+            font-family: Consolas, monospace;
+            background: #000;
+            color: #22d3ee;
+            padding: 20px;
+        }
+
+        .terminal {
+            border: 1px solid #22d3ee;
+            padding: 20px;
+            background: rgba(0,10,30,.8);
+            max-width: 800px;
+            margin: auto;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(34,211,238,.3);
+        }
+
+        .line {
+            margin: 8px 0;
+            white-space: pre-wrap;
+        }
+
+        .input-area {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        input {
+            flex: 1;
+            padding: 8px;
+            background: #020617;
+            border: 1px solid #22d3ee;
+            color: #e5e7eb;
+        }
+
+        button {
+            padding: 8px 12px;
+            border: 1px solid #22d3ee;
+            background: #000;
+            color: #22d3ee;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="terminal" id="term">
+        <div class="line">BOOTING TUDOSEU OS v12.88...</div>
+        <div class="line">Inicializando circuitos centrais...</div>
+        <div class="line">Sincronizando câmeras públicas...</div>
+        <div class="line">Carregando identidade do usuário...</div>
+        <div class="line" id="access"></div>
+
+        <div class="input-area">
+            <input id="cmd" placeholder="Digite um comando (ajuda)" autofocus>
+            <button onclick="run()">EXECUTAR</button>
+        </div>
+    </div>
+
+    <script>
+        function run() {
+            let cmd = document.getElementById("cmd").value.trim().toLowerCase();
+            let out = document.getElementById("access");
+
+            if (cmd === "ajuda") {
+                out.textContent = "Comandos disponíveis: status, setores, segredos, desligar";
+            }
+            else if (cmd === "status") {
+                out.textContent = "TUDOSEU TECNOLOGIAS: 100% operacional. Nenhuma falha declarada.";
+            }
+            else if (cmd === "setores") {
+                out.textContent = "Atuação: comunicação, vigilância, IA, drones, servidores, sistemas públicos.";
+            }
+            else if (cmd === "segredos") {
+                out.textContent = "ACESSO NEGADO: este terminal é monitorado.";
+            }
+            else if (cmd === "desligar") {
+                out.textContent = "Encerrando sessão...";
+            }
+            else {
+                out.textContent = "Comando inválido.";
+            }
+
+            document.getElementById("cmd").value = "";
+        }
+    </script>
+
+</body>
+</html>

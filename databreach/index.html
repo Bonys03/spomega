@@ -212,10 +212,16 @@ function dump() {
 /* ===== CHECK WIN ===== */
 function checkWin() {
     const feedback = document.getElementById("feedback");
-    if (PROGRAMS[0].value === TARGET) {
+
+    const dataBreacherOK = PROGRAMS[0].value === 6;
+    const othersEmpty =
+        PROGRAMS[1].value === 0 &&
+        PROGRAMS[2].value === 0;
+
+    if (dataBreacherOK && othersEmpty) {
         localStorage.setItem(DATA_KEY, "solved");
         feedback.textContent =
-            "DATA BREACH CONCLUÍDO. SISTEMA COMPROMETIDO.";
+            "DATA BREACH CONCLUÍDO. TODOS OS SUBSISTEMAS FORAM DRENADOS.";
         feedback.className = "feedback ok";
     } else {
         feedback.textContent = "";

@@ -4,6 +4,33 @@
 <meta charset="UTF-8">
 <title>São Paulo Ômega — Portal Civil</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+(function () {
+    const access = localStorage.getItem("spomega_access");
+
+    if (!access) {
+        window.location.replace("../acesso-negado/");
+        return;
+    }
+
+    try {
+        const data = JSON.parse(access);
+        if (!["CIVIL","BETA","ALPHA","OMEGA"].includes(data.level)) {
+            window.location.replace("../acesso-negado/");
+            return;
+        }
+    } catch {
+        window.location.replace("../acesso-negado/");
+        return;
+    }
+
+    // ✅ acesso válido → libera o body
+    document.addEventListener("DOMContentLoaded", () => {
+        document.body.style.display = "flex";
+    });
+})();
+</script>
+
 <style>
 * { box-sizing: border-box; }
 
@@ -12,6 +39,7 @@ body {
     font-family: Arial, sans-serif;
     background: #020617;
     color: #e5e7eb;
+	display: none;
 }
 
 header.brand {
@@ -243,17 +271,6 @@ Portal Civil de São Paulo Ômega • Conteúdo regulamentado • Acesso públic
 </footer>
 
 <script>
-const ACCESS_KEY = "spomega_access";
-const access = localStorage.getItem(ACCESS_KEY);
-
-if (!access) {
-    window.location.href = "../acesso-negado/";
-} else {
-    const data = JSON.parse(access);
-    if (data.level !== "CIVIL") {
-        window.location.href = "../acesso-negado/";
-    }
-}
 function logout() {
     localStorage.removeItem("spomega_access");
     window.location.href = "../index.html";

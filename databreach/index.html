@@ -61,10 +61,39 @@ h1 { color: #22d3ee; margin-bottom: 6px; }
 }
 
 .controls {
+    margin-top: 14px;
     display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-    margin-top: 10px;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.controls-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.controls-row select {
+    min-width: 180px;
+    flex-shrink: 0;
+}
+
+.arrow {
+    opacity: 0.7;
+}
+
+.dump-row {
+    justify-content: flex-start;
+    margin-top: 4px;
+}
+
+button.dump {
+    border-color: #f97316;
+    color: #f97316;
+}
+
+button.dump:hover {
+    background: rgba(249,115,22,0.15);
 }
 
 select, button {
@@ -76,15 +105,19 @@ select, button {
     cursor: pointer;
 }
 
-button.dump {
-    border-color: #f97316;
-    color: #f97316;
-}
-
 .feedback {
     min-height: 18px;
     font-size: 13px;
     margin-top: 10px;
+}
+
+@media (max-width: 520px) {
+    .controls-row {
+        flex-wrap: wrap;
+    }
+    .arrow {
+        display: none;
+    }
 }
 
 .ok { color: #4ade80; }
@@ -112,16 +145,23 @@ Transfira blocos completos entre programas ou descarte buffers.
 <div id="programs"></div>
 
 <div class="controls">
-    <!-- TRANSFERÊNCIA -->
-    <select id="from"></select>
-    <span>→</span>
-    <select id="to"></select>
-    <button onclick="transfer()">TRANSFERIR</button>
 
-    <!-- DUMP -->
-    <select id="dumpTarget"></select>
-    <button class="dump" onclick="dump()">DUMP</button>
+    <!-- LINHA: TRANSFERÊNCIA -->
+    <div class="controls-row">
+        <select id="from"></select>
+        <span class="arrow">→</span>
+        <select id="to"></select>
+        <button onclick="transfer()">TRANSFERIR</button>
+    </div>
+
+    <!-- LINHA: DUMP -->
+    <div class="controls-row dump-row">
+        <select id="dumpTarget"></select>
+        <button class="dump" onclick="dump()">DUMP</button>
+    </div>
+
 </div>
+
 
 
 <p id="feedback" class="feedback"></p>

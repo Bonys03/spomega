@@ -121,12 +121,9 @@ footer {
 
 .session-bar {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px 24px;
-    background: #020617;
-    border-bottom: 1px solid #1e293b;
-    font-size: 0.8rem;
+    justify-content: flex-end;
+    padding: 10px 24px;
+    background: transparent;
 }
 
 .session-bar span {
@@ -134,17 +131,19 @@ footer {
 }
 
 .session-bar button {
-    background: #020617;
+    background: transparent;
     border: 1px solid #ef4444;
     color: #ef4444;
-    padding: 6px 10px;
+    padding: 6px 12px;
     cursor: pointer;
     font-family: Consolas, monospace;
+    font-size: 0.8rem;
 }
 
 .session-bar button:hover {
     background: rgba(239,68,68,0.15);
 }
+
 
 
 </style>
@@ -154,8 +153,7 @@ footer {
 
 <header  class="brand">
   <div class="session-bar">
-	<span>Acesso civil autenticado</span>
-	<button onclick="logout()">Encerrar sessão</button>
+  <button onclick="logout()">Encerrar sessão</button>
   </div>
   <div class="brand-title">
     Governo de São Paulo <span class="omega">Ω</span>
@@ -177,7 +175,7 @@ footer {
 <div class="news-grid">
 
 <div class="card">
-<img src="../assets/img/news/noticianeotec.webp">
+<img src="../assets/img/civil/news/noticianeotec.webp">
 <div class="content">
 <h3>Nova expansão do Jardim Neotec</h3>
 Investimentos em biotecnologia prometem qualidade de vida elevada.

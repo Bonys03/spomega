@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Painel do Mestre — SP Ômega</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="mestre.css">
+</head>
+
+<body>
+<div class="container">
+
+  <header>
+    <h1>PAINEL DO MESTRE</h1>
+    <span class="subtitle">Infraestrutura Central — São Paulo Ômega</span>
+  </header>
+
+  <section class="auth">
+    <input type="password" id="adminToken" placeholder="TOKEN DE CONTROLE">
+    <button onclick="loadStatus()">CONECTAR</button>
+  </section>
+
+  <section id="dashboard" class="hidden">
+
+    <div class="card">
+      <h2>Status Global</h2>
+      <p>Etapa atual: <span id="stage">—</span></p>
+      <div class="stage-buttons">
+        <button onclick="setStage(1)">STAGE 1</button>
+        <button onclick="setStage(2)">STAGE 2</button>
+        <button onclick="setStage(3)">STAGE 3</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Acessos da Cidade</h2>
+
+      <div class="toggle">
+        <span>Portal Civil</span>
+        <button onclick="toggle('civil', true)">ATIVAR</button>
+        <button onclick="toggle('civil', false)">BLOQUEAR</button>
+      </div>
+
+      <div class="toggle">
+        <span>Distritos</span>
+        <button onclick="toggle('distritos', true)">ATIVAR</button>
+        <button onclick="toggle('distritos', false)">BLOQUEAR</button>
+      </div>
+    </div>
+
+  </section>
+</div>
+
+<script src="mestre.js"></script>
+</body>
+</html>

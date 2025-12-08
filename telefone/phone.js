@@ -1,93 +1,86 @@
-const screen = document.getElementById("screen");
-const swipePages = document.getElementById("swipePages");
+/* ===== MOCK DE JOGADORES (por enquanto) ===== */
 
-let currentScreen = 1; // 0 = status, 1 = home
-let isDragging = false;
-let startX = 0;
-let currentX = 0;
+const PLAYERS = {
+  "1111": {
+    name: "Agente Delta",
+    messages: [
+      "Você foi recrutado.",
+      "Não confie na autoridade."
+    ]
+  },
+  "2222": {
+    name: "Operador Sigma",
+    messages: [
+      "O sistema está vulnerável.",
+      "Acesso restrito aos distritos."
+    ]
+  }
+};
 
-/* CLOCK */
+let currentPlayer = null;
 
-function updateClock() {
+/* ===== RELOGIOS ===== */
+
+function updateClocks() {
   const now = new Date();
   const time = now.toLocaleTimeString("pt-BR", {
     hour: "2-digit",
     minute: "2-digit"
   });
 
+  document.getElementById("lockClock").textContent = time;
   document.getElementById("clockSmall").textContent = time;
   document.getElementById("clockBig").textContent = time;
 }
 
-setInterval(updateClock, 1000);
-updateClock();
+setInterval(updateClocks, 1000);
+updateClocks();
 
-/* SWIPE ENTRE STATUS E HOME */
+/* ===== DESBLOQUEIO ===== */
 
-function screenToX(idx) {
-  return -idx * screen.offsetWidth;
-}
+function unlock() {
+  const pin = document.getElementById("pinInput").value;
+  const feedback = document.getElementById("lockFeedback");
 
-function setTranslate(x, animate = false) {
-  swipePages.style.transition = animate ? "transform .3s ease" : "none";
-  swipePages.style.transform = `translateX(${x}px)`;
-}
-
-// start
-screen.addEventListener("mousedown", e => {
-  // se algum app estiver aberto, não faz swipe
-  if (document.querySelector(".app-layer.active")) return;
-
-  isDragging = true;
-  startX = e.clientX;
-  currentX = startX;
-});
-
-// move
-document.addEventListener("mousemove", e => {
-  if (!isDragging) return;
-
-  currentX = e.clientX;
-  const delta = currentX - startX;
-  const base = screenToX(currentScreen);
-
-  setTranslate(base + delta, false);
-});
-
-// end
-document.addEventListener("mouseup", () => {
-  if (!isDragging) return;
-  isDragging = false;
-
-  const delta = currentX - startX;
-  const threshold = screen.offsetWidth * 0.25;
-
-  if (delta < -threshold && currentScreen < 1) {
-    currentScreen++;
-  } else if (delta > threshold && currentScreen > 0) {
-    currentScreen--;
+  if (!PLAYERS[pin]) {
+    feedback.textContent = "Senha inválida";
+    return;
   }
 
-  setTranslate(screenToX(currentScreen), true);
-});
+  feedback.textContent = "Desbloqueando...";
+  currentPlayer = PLAYERS[pin];
 
-// inicial
-setTranslate(screenToX(currentScreen), false);
+  setTimeout(() => {
+    document.getElementById("lockscreen").style.display = "none";
+    document.getElementById("system").classList.remove("hidden");
+    loadPlayerData();
+  }, 1200);
+}
 
-/* APPS EM OVERLAY */
+function loadPlayerData() {
+  document.getElementById("playerName").textContent = currentPlayer.name;
+
+  const msgBox = document.getElementById("messagesContent");
+  msgBox.innerHTML = "";
+
+  currentPlayer.messages.forEach(m => {
+    const div = document.createElement("div");
+    div.className = "msg incoming";
+    div.textContent = m;
+    msgBox.appendChild(div);
+  });
+}
+
+/* ===== APPS ===== */
 
 function openApp(name) {
-  closeApp(); // fecha qualquer outro app
-  const id = "app" + capitalize(name);
-  const el = document.getElementById(id);
-  if (el) {
-    el.classList.add("active");
-  }
+  closeApp();
+  document.getElementById("app" + capitalize(name)).classList.add("active");
 }
 
 function closeApp() {
-  document.querySelectorAll(".app-layer").forEach(el => {
-    el.classList.remove("active");
+  document.querySelectorAll(".app-layer").forEach(a => {
+    a.classList.remove("active");
   });
 }
 

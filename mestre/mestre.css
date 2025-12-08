@@ -88,3 +88,19 @@ h1 {
   justify-content: space-between;
   margin-top: 10px;
 }
+.status {
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+
+.status.on {
+  color: #00ffd5;
+  text-shadow: 0 0 8px #00ffd5;
+}
+
+.status.off {
+  color: #ff3b3b;
+  text-shadow: 0 0 8px #ff3b3b;
+}

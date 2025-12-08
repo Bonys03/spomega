@@ -37,16 +37,34 @@
 
       <div class="toggle">
         <span>Portal Civil</span>
+        <span id="status-civil" class="status">—</span>
         <button onclick="toggle('civil', true)">ATIVAR</button>
         <button onclick="toggle('civil', false)">BLOQUEAR</button>
       </div>
 
       <div class="toggle">
         <span>Distritos</span>
+        <span id="status-distritos" class="status">—</span>
         <button onclick="toggle('distritos', true)">ATIVAR</button>
         <button onclick="toggle('distritos', false)">BLOQUEAR</button>
+    </div>
+    <div class="card">
+      <h2>Eventos Ativos</h2>
+
+      <div class="toggle">
+        <span>Apagão</span>
+        <button onclick="eventToggle('blackout', true)">ATIVAR</button>
+        <button onclick="eventToggle('blackout', false)">DESATIVAR</button>
+      </div>
+
+      <div class="toggle">
+        <span>Alarme</span>
+        <button onclick="eventToggle('alarm', true)">ATIVAR</button>
+        <button onclick="eventToggle('alarm', false)">DESATIVAR</button>
       </div>
     </div>
+
+
 
   </section>
 </div>

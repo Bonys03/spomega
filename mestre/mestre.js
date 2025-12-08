@@ -56,4 +56,38 @@ async function toggle(page, enabled) {
 
 function updateUI(state) {
   document.getElementById("stage").textContent = state.stage;
+
+  updateStatus("civil", state.civil);
+  updateStatus("distritos", state.distritos);
 }
+
+function updateStatus(name, enabled) {
+  const el = document.getElementById(`status-${name}`);
+  if (!el) return;
+
+  if (enabled) {
+    el.textContent = "ONLINE";
+    el.className = "status on";
+  } else {
+    el.textContent = "BLOQUEADO";
+    el.className = "status off";
+  }
+}
+
+async function eventToggle(event, enabled) {
+  const adminToken = document.getElementById("adminToken").value;
+
+  const res = await fetch(API_URL, {
+    method: "POST",
+    body: JSON.stringify({
+      action: "adminToggleEvent",
+      adminToken,
+      event,
+      enabled
+    })
+  });
+
+  const data = await res.json();
+  updateUI(data.state);
+}
+

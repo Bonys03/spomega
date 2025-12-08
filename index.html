@@ -198,24 +198,8 @@ button {
 const INTRO_KEY = "spomega_intro_seen";
 const ACCESS_KEY = "spomega_access";
 
-const USERS = {
-  "civil.name": {
-    password: "CIVIL-42",
-    level: "CIVIL"
-  },
-  "beta.tech": {
-    password: "BETA-113",
-    level: "BETA"
-  },
-  "alpha.ops": {
-    password: "ALPHA-739",
-    level: "ALPHA"
-  },
-  "omega.dir": {
-    password: "OMEGA-42",
-    level: "OMEGA"
-  }
-};
+// COLE AQUI A URL DO SEU APPS SCRIPT WEB APP
+const API_URL = "https://script.google.com/macros/s/AKfycby8gcFcYuJejPXabTRNQA-4NNNMPZh5NI-kC0r4Hac-iYI78YDfH7Lu62cqWCPpKTEKFA/exec";
 
 window.addEventListener("DOMContentLoaded", () => {
     const intro = document.getElementById("intro");
@@ -227,48 +211,78 @@ window.addEventListener("DOMContentLoaded", () => {
 
     const saved = localStorage.getItem(ACCESS_KEY);
     if (saved) {
-        const data = JSON.parse(saved);
-        setAccessGranted(data.level, true);
+        try {
+            const data = JSON.parse(saved);
+            if (data.level) {
+                setAccessGranted(data.level, true);
+            }
+        } catch (e) {
+            console.warn("Dados de acesso corrompidos:", e);
+        }
     }
 });
 
-function login() {
-    const user = document.getElementById("user").value.trim();
-    const pass = document.getElementById("pass").value.trim();
+async function login() {
+    const userInput = document.getElementById("user");
+    const passInput = document.getElementById("pass");
     const feedback = document.getElementById("feedback");
 
-    if (!USERS[user] || USERS[user].password !== pass) {
-        feedback.textContent = "ACESSO NEGADO — credenciais inválidas.";
+    const user = userInput.value.trim();
+    const pass = passInput.value.trim();
+
+    if (!user || !pass) {
+        feedback.textContent = "Informe usuário e senha.";
         feedback.className = "feedback error";
         return;
     }
 
-    const level = USERS[user].level;
-    localStorage.setItem(ACCESS_KEY, JSON.stringify({ user, level }));
-    setAccessGranted(level);
+    feedback.textContent = "Verificando credenciais...";
+    feedback.className = "feedback";
+
+    try {
+        const res = await fetch(API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                action: "login",
+                user: user,
+                pass: pass
+            })
+        });
+
+        const data = await res.json();
+
+        if (!data.success) {
+            feedback.textContent = data.message || "Acesso negado.";
+            feedback.className = "feedback error";
+            return;
+        }
+
+        // Salva token + nível no localStorage
+        localStorage.setItem(ACCESS_KEY, JSON.stringify({
+            token: data.token,
+            level: data.level
+        }));
+
+        setAccessGranted(data.level);
+
+    } catch (err) {
+        console.error(err);
+        feedback.textContent = "Erro de comunicação com o servidor.";
+        feedback.className = "feedback error";
+    }
 }
 
 function setAccessGranted(level, silent = false) {
     const feedback = document.getElementById("feedback");
-    document.getElementById("level-label").textContent =
-        `NÍVEL ${level} AUTENTICADO`;
+    const label = document.getElementById("level-label");
 
-    if (!silent) {
-        feedback.textContent =
-            `ACESSO CONCEDIDO. PERMISSÕES ${level} ATIVAS.`;
-        feedback.className = "feedback ok";
+    if (label) {
+        label.textContent = `NÍVEL ${level} AUTENTICADO`;
     }
 
-    document.getElementById("user").disabled = true;
-    document.getElementById("pass").disabled = true;
-}
-
-function setAccessGranted(level, silent = false) {
-    const feedback = document.getElementById("feedback");
-    document.getElementById("level-label").textContent =
-        `NÍVEL ${level} AUTENTICADO`;
-
-    if (level === "CIVIL") {
+    // Mesmo comportamento de antes: CIVIL vai direto pro portal
+    if (!silent && level === "CIVIL") {
         window.location.href = "./civil/";
         return;
     }
@@ -282,7 +296,6 @@ function setAccessGranted(level, silent = false) {
     document.getElementById("user").disabled = true;
     document.getElementById("pass").disabled = true;
 }
-
 </script>
 
 

@@ -35,6 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
   })
   .then(r => r.json())
   .then(res => {
+    console.log("checkAccess response:", res);
     // ✅ AUTORIZADO
     if (res.status === "ok") {
       document.body.style.visibility = "visible";

@@ -188,6 +188,7 @@ button {
     <div class="input-row" style="margin-top:8px">
         <input id="pass" placeholder="SENHA" type="password" autocomplete="off">
         <button onclick="login()">ENTRAR</button>
+        <button id="logoutBtn" onclick="logout()">Trocar usuário</button>
     </div>
 
     <p id="feedback" class="feedback"></p>
@@ -294,6 +295,11 @@ function setAccessGranted(level, silent = false) {
     document.getElementById("user").disabled = true;
     document.getElementById("pass").disabled = true;
 }
+function logout() {
+    localStorage.removeItem("spomega_access");
+    window.location.reload();
+}
+
 </script>
 
 

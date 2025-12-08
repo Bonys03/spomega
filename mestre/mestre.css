@@ -104,3 +104,37 @@ h1 {
   color: #ff3b3b;
   text-shadow: 0 0 8px #ff3b3b;
 }
+.user-form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.user-form input,
+.user-form select {
+  padding: 8px;
+  background: #020412;
+  border: 1px solid #0ff;
+  color: #0ff;
+}
+
+.user-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.user-table th,
+.user-table td {
+  border-bottom: 1px solid rgba(0,255,255,0.3);
+  padding: 8px;
+  text-align: left;
+  font-size: 13px;
+}
+
+.user-table button {
+  background: transparent;
+  border: 1px solid #ff3b3b;
+  color: #ff3b3b;
+  cursor: pointer;
+}

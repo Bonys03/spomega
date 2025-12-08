@@ -19,6 +19,7 @@ async function loadStatus() {
 
   document.getElementById("dashboard").classList.remove("hidden");
   updateUI(data.state);
+  loadUsers();
 }
 
 async function setStage(stage) {
@@ -89,5 +90,79 @@ async function eventToggle(event, enabled) {
 
   const data = await res.json();
   updateUI(data.state);
+}
+async function loadUsers() {
+  const adminToken = document.getElementById("adminToken").value;
+
+  const res = await fetch(API_URL, {
+    method: "POST",
+    body: JSON.stringify({
+      action: "adminListUsers",
+      adminToken
+    })
+  });
+
+  const data = await res.json();
+  if (!data.success) return;
+
+  const tbody = document.getElementById("userList");
+  tbody.innerHTML = "";
+
+  data.users.forEach(u => {
+    const tr = document.createElement("tr");
+
+    tr.innerHTML = `
+      <td>${u.user}</td>
+      <td>${u.role}</td>
+      <td>
+        <button onclick="deleteUser('${u.user}')">DELETAR</button>
+      </td>
+    `;
+
+    tbody.appendChild(tr);
+  });
+}
+async function createUser() {
+  const adminToken = document.getElementById("adminToken").value;
+  const user = document.getElementById("newUser").value.trim();
+  const password = document.getElementById("newPass").value.trim();
+  const role = document.getElementById("newRole").value;
+
+  if (!user || !password) {
+    alert("Informe usuário e senha");
+    return;
+  }
+
+  await fetch(API_URL, {
+    method: "POST",
+    body: JSON.stringify({
+      action: "adminCreateUser",
+      adminToken,
+      user,
+      password,
+      role
+    })
+  });
+
+  document.getElementById("newUser").value = "";
+  document.getElementById("newPass").value = "";
+
+  loadUsers();
+}
+async function deleteUser(user) {
+  const adminToken = document.getElementById("adminToken").value;
+
+  if (!confirm(`Remover usuário ${user}?`)) return;
+
+  await fetch(API_URL, {
+    method: "POST",
+    body: JSON.stringify({
+      action: "adminDeleteUser",
+      adminToken,
+      user
+    })
+  });
+
+  loadUsers();
 }
 

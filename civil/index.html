@@ -40,18 +40,26 @@ document.addEventListener("DOMContentLoaded", () => {
     })
     .then(r => r.json())
     .then(res => {
-        if (!res.success || !res.allowed) {
+        if (res.status === "ok") {
+            document.body.style.visibility = "visible";
+            return;
+        }
+
+        if (res.status === "locked") {
+            window.location.replace("../lockdown/");
+            return;
+        }
+
+        if (res.status === "forbidden") {
             window.location.replace("../acesso-negado/");
             return;
         }
 
-        // ✅ acesso confirmado → mostra a página
-        document.body.style.display = "block";
-    })
-    .catch(err => {
-        console.error("Erro ao validar acesso:", err);
-        window.location.replace("../acesso-negado/");
-    });
+        // unauthenticated
+        localStorage.removeItem("spomega_access");
+        window.location.replace("../");
+        });
+
 });
 </script>
 

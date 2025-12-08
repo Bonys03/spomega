@@ -63,7 +63,33 @@
         <button onclick="eventToggle('alarm', false)">DESATIVAR</button>
       </div>
     </div>
+    <div class="card">
+        <h2>Gestão de Usuários</h2>
+        <div class="user-form">
+            <input type="text" id="newUser" placeholder="USUÁRIO">
+            <input type="text" id="newPass" placeholder="SENHA">
+            <select id="newRole">
+            <option value="CIVIL">CIVIL</option>
+            <option value="BETA">BETA</option>
+            <option value="ALPHA">ALPHA</option>
+            <option value="OMEGA">OMEGA</option>
+            </select>
+            <button onclick="createUser()">CRIAR</button>
+        </div>
 
+        <table class="user-table">
+            <thead>
+            <tr>
+                <th>Usuário</th>
+                <th>Role</th>
+                <th>Ação</th>
+            </tr>
+            </thead>
+            <tbody id="userList">
+            <!-- preenchido via JS -->
+            </tbody>
+        </table>
+    </div>
 
 
   </section>

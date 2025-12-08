@@ -71,6 +71,14 @@ h1 {
   font-size: 18px;
 }
 
+.card .toggle {
+  margin-bottom: 14px;
+}
+
+.card.access {
+  margin-bottom: 40px; /* distância maior antes dos eventos */
+}
+
 .stage-buttons button,
 .toggle button {
   margin-right: 5px;

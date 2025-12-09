@@ -205,14 +205,23 @@ body {
   margin-bottom: 8px;
   padding: 6px;
   border-radius: 6px;
+
+  /* ✅ QUEBRA DE LINHA CORRETA */
+  white-space: pre-wrap;      /* respeita \n e quebra linhas */
+  word-break: break-word;     /* quebra palavras muito longas */
+  overflow-wrap: break-word;  /* padrão moderno */
+  max-width: 90%;             /* evita ocupar tela inteira */
 }
 
-.incoming {
+.msg.incoming {
   background: rgba(255,0,0,0.25);
+  text-align: left;
 }
 
-.outgoing {
+.msg.outgoing {
   background: rgba(0,255,255,0.25);
   text-align: right;
+  margin-left: auto; /* empurra para direita */
 }
+
 

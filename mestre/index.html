@@ -99,6 +99,39 @@
       <button onclick="sendMessage()">ENVIAR</button>
     </div>
 
+    <div class="card">
+        <h2>Conversas com Jogadores</h2>
+
+        <div class="msg-master-panel">
+
+            <!-- COLUNA 1 — Jogadores (PINs) -->
+            <div class="msg-col players">
+                <h3>Jogadores</h3>
+                <input id="lookupPin" placeholder="PIN do jogador">
+                <button onclick="loadConversations()">CARREGAR</button>
+                <div id="playerChatList"></div>
+            </div>
+
+            <!-- COLUNA 2 — NPCs -->
+            <div class="msg-col npcs">
+                <h3>NPCs</h3>
+                <div id="npcList"></div>
+            </div>
+
+            <!-- COLUNA 3 — Chat -->
+            <div class="msg-col chat">
+                <h3 id="chatTitle">CHAT</h3>
+
+                <div id="chatHistory"></div>
+
+                <div class="chatInput">
+                    <input id="npcMessage" placeholder="Digite uma resposta...">
+                    <button onclick="sendNPCMessage()">ENVIAR</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
   </section>
 </div>
 

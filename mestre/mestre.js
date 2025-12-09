@@ -192,4 +192,101 @@ async function sendMessage() {
   document.getElementById("msgText").value = "";
 }
 
+async function loadConversations() {
+  const adminToken = document.getElementById("adminToken").value;
+  const pin = document.getElementById("lookupPin").value.trim();
+
+  const res = await fetch(API_URL, {
+    method: "POST",
+    body: JSON.stringify({
+      action: "adminGetConversation",
+      adminToken,
+      pin
+    })
+  });
+
+  const data = await res.json();
+  if (!data.success) {
+    alert("PIN inválido ou sem mensagens");
+    return;
+  }
+
+  window.currentPin = pin;
+  window.currentNPC = null;
+
+  renderPlayerNPCs(data.conversations);
+}
+
+function renderPlayerNPCs(conversations) {
+  const npcList = document.getElementById("npcList");
+  npcList.innerHTML = "";
+
+  window.currentConversations = conversations;
+
+  Object.keys(conversations).forEach(npc => {
+    const div = document.createElement("div");
+    div.className = "list-item";
+    div.textContent = npc;
+    div.onclick = () => openNPCChat(npc);
+    npcList.appendChild(div);
+  });
+}
+
+function openNPCChat(npc) {
+  window.currentNPC = npc;
+
+  document.getElementById("chatTitle").textContent = npc;
+
+  const historyDiv = document.getElementById("chatHistory");
+  historyDiv.innerHTML = "";
+
+  const msgs = currentConversations[npc];
+
+  msgs.forEach(m => {
+    const bubble = document.createElement("div");
+    bubble.className = "msg-bubble " + (m.direction === "OUT" ? "out" : "in");
+    bubble.innerHTML = `
+      <strong>${m.direction === "OUT" ? npc : "Jogador"}:</strong><br>
+      ${m.message}<br>
+      <span style="font-size:10px; opacity:0.7;">
+        ${new Date(m.timestamp).toLocaleTimeString("pt-BR")}
+      </span>
+    `;
+    historyDiv.appendChild(bubble);
+  });
+
+  historyDiv.scrollTop = historyDiv.scrollHeight;
+}
+
+async function sendNPCMessage() {
+  if (!window.currentNPC || !window.currentPin) return;
+
+  const adminToken = document.getElementById("adminToken").value;
+  const text = document.getElementById("npcMessage").value.trim();
+  if (!text) return;
+
+  await fetch(API_URL, {
+    method: "POST",
+    body: JSON.stringify({
+      action: "adminSendMessage",
+      adminToken,
+      pin: currentPin,
+      sender: currentNPC,
+      message: text
+    })
+  });
+
+  // Atualiza o histórico local do painel
+  window.currentConversations[currentNPC].push({
+    sender: currentNPC,
+    direction: "OUT",
+    message: text,
+    timestamp: Date.now()
+  });
+
+  document.getElementById("npcMessage").value = "";
+
+  openNPCChat(currentNPC);
+}
+
 

@@ -1,4 +1,7 @@
 const API_URL = "https://script.google.com/macros/s/AKfycbyell6wEMmMXRB-PazRK9n7M2dW0h3Cd5gzyCT7PPQ_3IUEM32gSC80UK2VcGLO95QMtw/exec";
+let adminPolling = false;
+let adminPollingTimer = null;
+
 
 async function loadStatus() {
   const adminToken = document.getElementById("adminToken").value;
@@ -218,6 +221,11 @@ async function loadConversations() {
   window.currentPin = pin;
   window.currentNPC = null;
 
+  if (!adminPolling) {
+  adminPolling = true;
+  adminPollingTimer = setInterval(pollAdminMessages, 3000);
+  }
+
   renderPlayerNPCs(data.conversations);
 }
 
@@ -292,6 +300,44 @@ async function sendNPCMessage() {
   document.getElementById("npcMessage").value = "";
 
   openNPCChat(currentNPC);
+}
+
+async function pollAdminMessages() {
+  if (!window.currentPin) return;
+
+  const adminToken = document.getElementById("adminToken").value;
+
+  const res = await fetch(API_URL, {
+    method: "POST",
+    body: JSON.stringify({
+      action: "adminPollMessages",
+      adminToken,
+      pin: currentPin
+    })
+  });
+
+  const data = await res.json();
+  if (!data.success || !data.messages.length) return;
+
+  data.messages.forEach(m => {
+    // garante estrutura
+    if (!currentConversations[m.sender]) {
+      currentConversations[m.sender] = [];
+      renderPlayerNPCs(currentConversations);
+    }
+
+    currentConversations[m.sender].push({
+      sender: "Jogador",
+      direction: "IN",
+      message: m.message,
+      timestamp: m.timestamp
+    });
+
+    // se chat aberto, renderiza na hora
+    if (currentNPC === m.sender) {
+      openNPCChat(m.sender);
+    }
+  });
 }
 
 

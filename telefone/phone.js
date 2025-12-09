@@ -1,22 +1,4 @@
-/* ===== MOCK DE JOGADORES (por enquanto) ===== */
-
-const PLAYERS = {
-  "1111": {
-    name: "Agente Delta",
-    messages: [
-      "Você foi recrutado.",
-      "Não confie na autoridade."
-    ]
-  },
-  "2222": {
-    name: "Operador Sigma",
-    messages: [
-      "O sistema está vulnerável.",
-      "Acesso restrito aos distritos."
-    ]
-  }
-};
-
+const API_URL = "https://script.google.com/macros/s/AKfycbyell6wEMmMXRB-PazRK9n7M2dW0h3Cd5gzyCT7PPQ_3IUEM32gSC80UK2VcGLO95QMtw/exec";
 let currentPlayer = null;
 
 /* ===== RELOGIOS ===== */
@@ -38,26 +20,50 @@ updateClocks();
 
 /* ===== DESBLOQUEIO ===== */
 
-function unlock() {
+async function unlock() {
   const pin = document.getElementById("pinInput").value;
   const feedback = document.getElementById("lockFeedback");
 
-  if (!PLAYERS[pin]) {
-    feedback.textContent = "Senha inválida";
+  if (!pin) {
+    feedback.textContent = "Digite a senha";
     return;
   }
 
-  feedback.textContent = "Desbloqueando...";
-  currentPlayer = PLAYERS[pin];
+  feedback.textContent = "Verificando acesso...";
 
-  setTimeout(() => {
-    document.getElementById("lockscreen").style.display = "none";
-    document.getElementById("system").classList.remove("hidden");
-    currentScreen = 0;
-    setTranslate(screenToX(currentScreen), false);
-    loadPlayerData();
-  }, 1200);
+  try {
+    const res = await fetch(API_URL, {
+      method: "POST",
+      body: JSON.stringify({
+        action: "phoneUnlock",
+        pin
+      })
+    });
+
+    const data = await res.json();
+
+    if (!data.success) {
+      feedback.textContent = "Senha inválida";
+      return;
+    }
+
+    currentPlayer = data.player;
+    feedback.textContent = "Desbloqueando...";
+
+    setTimeout(() => {
+      document.getElementById("lockscreen").style.display = "none";
+      document.getElementById("system").classList.remove("hidden");
+      currentScreen = 0;
+      setTranslate(screenToX(currentScreen), false);
+      loadPlayerData();
+    }, 1200);
+
+  } catch (err) {
+    console.error(err);
+    feedback.textContent = "Erro de conexão";
+  }
 }
+
 
 function loadPlayerData() {
   document.getElementById("playerName").textContent = currentPlayer.name;

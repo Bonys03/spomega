@@ -323,3 +323,22 @@ function closeChat() {
   document.getElementById("chatView").classList.add("hidden");
   document.getElementById("conversationList").classList.remove("hidden");
 }
+
+async function sendReply() {
+  const text = document.getElementById("replyText").value.trim();
+  if (!text || !currentChat) return;
+
+  document.getElementById("replyText").value = "";
+
+  appendMessage("Você", text, Date.now(), document.getElementById("chatMessages"), "outgoing");
+
+  await fetch(API_URL, {
+    method: "POST",
+    body: JSON.stringify({
+      action: "phoneSendReply",
+      pin: window.playerPin,
+      npc: currentChat,
+      message: text
+    })
+  });
+}

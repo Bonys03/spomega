@@ -210,6 +210,10 @@ async function loadConversations() {
     alert("PIN inválido ou sem mensagens");
     return;
   }
+  if (Object.keys(data.conversations).length === 0) {
+  alert("Esse jogador ainda não possui mensagens");
+  return;
+  }
 
   window.currentPin = pin;
   window.currentNPC = null;
@@ -225,6 +229,7 @@ function renderPlayerNPCs(conversations) {
 
   Object.keys(conversations).forEach(npc => {
     const div = document.createElement("div");
+    if (npc === "Jogador") return;
     div.className = "list-item";
     div.textContent = npc;
     div.onclick = () => openNPCChat(npc);

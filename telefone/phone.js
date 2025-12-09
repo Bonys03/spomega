@@ -80,9 +80,8 @@ async function unlock() {
 
 function loadPlayerData() {
   document.getElementById("playerName").textContent = currentPlayer.name;
-  const msgBox = document.getElementById("messagesContent");
-  msgBox.innerHTML = "";
 }
+
 
 /* ===== APPS ===== */
 
@@ -157,6 +156,7 @@ document.addEventListener("mouseup", () => {
 
   setTranslate(screenToX(currentScreen), true);
 });
+
 async function pollMessages() {
   if (!window.playerPin) return;
 
@@ -172,39 +172,32 @@ async function pollMessages() {
     const data = await res.json();
     if (!data.success || !data.messages.length) return;
 
-    const box = document.getElementById("messagesContent");
-
     data.messages.forEach(m => {
-      appendMessage(m.sender, m.message, m.timestamp);
+      // adiciona ao histórico geral
+      allMessages.push(m);
+
+      // agrupa por remetente
+      if (!conversations[m.sender]) {
+        conversations[m.sender] = [];
+      }
+      conversations[m.sender].push(m);
+
+      // se o chat atual for desse remetente, renderiza na tela
+      if (currentChat === m.sender) {
+        appendMessage(m.sender, m.message, m.timestamp);
+      }
     });
 
-    box.scrollTop = box.scrollHeight;
-
-    data.messages.forEach(m => {
-    allMessages.push(m);
-
-    if (!conversations[m.sender]) conversations[m.sender] = [];
-    conversations[m.sender].push(m);
-
-    // se estiver no chat correto, atualiza
-    if (currentChat === m.sender) {
-      appendMessage(m.sender, m.message, m.timestamp);
-    }
-    });
-
-// atualizar lista de conversas
-renderConversationList();
-
+    // sempre atualiza a lista de conversas
+    renderConversationList();
 
   } catch (err) {
-    console.error(err);
+    console.error("Erro no polling:", err);
   }
 }
 
-async function loadMessageHistory() {
-  const box = document.getElementById("messagesContent");
-  box.innerHTML = "";
 
+async function loadMessageHistory() {
   try {
     const res = await fetch(API_URL, {
       method: "POST",
@@ -217,37 +210,31 @@ async function loadMessageHistory() {
     const data = await res.json();
     if (!data.success) return;
 
-    data.messages.forEach(m => {
-      appendMessage(m.sender, m.message, m.timestamp);
-    });
-
-    // começa já no final do histórico
-    box.scrollTop = box.scrollHeight;
-
-    if (!pollingStarted) {
-      pollingStarted = true;
-      setInterval(pollMessages, 4000); // 4 segundos, por exemplo
-    }
-
     allMessages = data.messages;
 
-    // agrupar mensagens por remetente
     conversations = {};
     allMessages.forEach(m => {
       if (!conversations[m.sender]) conversations[m.sender] = [];
       conversations[m.sender].push(m);
     });
 
-    // exibir lista de conversas
     renderConversationList();
+
+    if (!pollingStarted) {
+      pollingStarted = true;
+      setInterval(pollMessages, 4000);
+    }
 
   } catch (err) {
     console.error(err);
   }
 }
 
-function appendMessage(sender, text, timestamp, container = document.getElementById("chatMessages")) {
-  const box = document.getElementById("messagesContent");
+
+function appendMessage(sender, text, timestamp, container) {
+  const box = container || document.getElementById("chatMessages");
+
+  if (!box) return;
 
   const msg = document.createElement("div");
   msg.className = "msg incoming";
@@ -276,6 +263,7 @@ function appendMessage(sender, text, timestamp, container = document.getElementB
 
   box.scrollTop = box.scrollHeight;
 }
+
 
 function renderConversationList() {
   const list = document.getElementById("conversationList");

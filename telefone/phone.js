@@ -173,28 +173,33 @@ async function pollMessages() {
     if (!data.success || !data.messages.length) return;
 
     data.messages.forEach(m => {
-      // adiciona ao histórico geral
+
+      // 🚫 IGNORA mensagens enviadas pelo jogador (echo)
+      if (m.direction === "IN") {
+        return;
+      }
+
+      // adiciona ao histórico
       allMessages.push(m);
 
-      // agrupa por remetente
       if (!conversations[m.sender]) {
         conversations[m.sender] = [];
       }
       conversations[m.sender].push(m);
 
-      // se o chat atual for desse remetente, renderiza na tela
+      // renderiza apenas se o chat estiver aberto
       if (currentChat === m.sender) {
         appendMessage(m.sender, m.message, m.timestamp);
       }
     });
 
-    // sempre atualiza a lista de conversas
     renderConversationList();
 
   } catch (err) {
     console.error("Erro no polling:", err);
   }
 }
+
 
 
 async function loadMessageHistory() {
@@ -330,6 +335,7 @@ async function sendReply() {
 
   document.getElementById("replyText").value = "";
 
+  // ✅ render otimista
   appendMessage("Você", text, Date.now(), document.getElementById("chatMessages"), "outgoing");
 
   await fetch(API_URL, {
@@ -342,3 +348,4 @@ async function sendReply() {
     })
   });
 }
+

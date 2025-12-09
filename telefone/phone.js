@@ -1,6 +1,10 @@
 const API_URL = "https://script.google.com/macros/s/AKfycbyell6wEMmMXRB-PazRK9n7M2dW0h3Cd5gzyCT7PPQ_3IUEM32gSC80UK2VcGLO95QMtw/exec";
 let currentPlayer = null;
 let pollingStarted = false;
+let allMessages = [];          // histórico completo
+let conversations = {};        // agrupado por sender
+let currentChat = null;
+
 
 /* ===== RELOGIOS ===== */
 
@@ -176,6 +180,22 @@ async function pollMessages() {
 
     box.scrollTop = box.scrollHeight;
 
+    data.messages.forEach(m => {
+    allMessages.push(m);
+
+    if (!conversations[m.sender]) conversations[m.sender] = [];
+    conversations[m.sender].push(m);
+
+    // se estiver no chat correto, atualiza
+    if (currentChat === m.sender) {
+      appendMessage(m.sender, m.message, m.timestamp);
+    }
+    });
+
+// atualizar lista de conversas
+renderConversationList();
+
+
   } catch (err) {
     console.error(err);
   }
@@ -209,12 +229,24 @@ async function loadMessageHistory() {
       setInterval(pollMessages, 4000); // 4 segundos, por exemplo
     }
 
+    allMessages = data.messages;
+
+    // agrupar mensagens por remetente
+    conversations = {};
+    allMessages.forEach(m => {
+      if (!conversations[m.sender]) conversations[m.sender] = [];
+      conversations[m.sender].push(m);
+    });
+
+    // exibir lista de conversas
+    renderConversationList();
+
   } catch (err) {
     console.error(err);
   }
 }
 
-function appendMessage(sender, text, timestamp) {
+function appendMessage(sender, text, timestamp, container = document.getElementById("chatMessages")) {
   const box = document.getElementById("messagesContent");
 
   const msg = document.createElement("div");
@@ -245,3 +277,58 @@ function appendMessage(sender, text, timestamp) {
   box.scrollTop = box.scrollHeight;
 }
 
+function renderConversationList() {
+  const list = document.getElementById("conversationList");
+  list.innerHTML = "";
+
+  Object.keys(conversations).forEach(sender => {
+    const msgs = conversations[sender];
+    const last = msgs[msgs.length - 1];
+
+    const div = document.createElement("div");
+    div.className = "conversation-item";
+    div.onclick = () => openChat(sender);
+
+    div.innerHTML = `
+      <div>
+        <div class="conversation-name">${sender}</div>
+        <div class="conversation-preview">${last.message.slice(0, 30)}</div>
+      </div>
+      <div class="conversation-time">
+        ${new Date(last.timestamp).toLocaleTimeString("pt-BR", {
+          hour: "2-digit",
+          minute: "2-digit"
+        })}
+      </div>
+    `;
+
+    list.appendChild(div);
+  });
+}
+
+function openChat(sender) {
+  currentChat = sender;
+
+  document.getElementById("chatHeader").textContent = sender;
+  document.getElementById("conversationList").classList.add("hidden");
+  document.getElementById("chatView").classList.remove("hidden");
+
+  renderChatMessages();
+}
+
+function renderChatMessages() {
+  const box = document.getElementById("chatMessages");
+  box.innerHTML = "";
+
+  conversations[currentChat].forEach(m => {
+    appendMessage(m.sender, m.message, m.timestamp, box);
+  });
+
+  box.scrollTop = box.scrollHeight;
+}
+function closeChat() {
+  currentChat = null;
+
+  document.getElementById("chatView").classList.add("hidden");
+  document.getElementById("conversationList").classList.remove("hidden");
+}

@@ -75,7 +75,21 @@
           <span>Mensagens</span>
           <button class="btn-close" onclick="closeApp()">↩</button>
         </header>
-        <div class="app-content" id="messagesContent"></div>
+        <div class="app-content">
+  
+          <!-- LISTA DE CONVERSAS -->
+          <div id="conversationList"></div>
+
+          <!-- CHAT ESPECÍFICO -->
+          <div id="chatView" class="hidden">
+            <div id="chatHeader">
+              <span class="backBtn" onclick="closeChat()">⤺</span>
+              <span id="chatTitle"></span>
+            </div>
+            <div id="chatMessages"></div>
+          </div>
+
+        </div>
       </div>
 
       <!-- APP: HACK -->

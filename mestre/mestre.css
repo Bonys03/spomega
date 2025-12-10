@@ -64,6 +64,8 @@ h1 {
   box-shadow: 0 0 20px rgba(0,255,255,0.2);
   padding: 20px;
   margin-bottom: 20px;
+  position: relative;   /* garante referência correta */
+  overflow: hidden;
 }
 
 .card h2 {
@@ -189,9 +191,14 @@ textarea {
 }
 
 .msg-col.chat {
-  min-width: 0;        /* 🔴 ESSENCIAL para grid */
+  min-width: 0;
   max-width: 100%;
-  overflow: hidden;   /* impede vazamento visual */
+  overflow: hidden;
+  box-sizing: border-box; 
+}
+
+.msg-col.chat * {
+  box-sizing: border-box;
 }
 
 .msg-col.chat .chatInput {

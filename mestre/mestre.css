@@ -166,9 +166,12 @@ textarea {
 
 .msg-master-panel {
   display: grid;
-  grid-template-columns: 220px 260px 1fr;
+  grid-template-columns: 220px 260px minmax(0, 1fr);
   gap: 20px;
   margin-top: 20px;
+
+  width: 100%;
+  max-width: 100%;
 }
 
 .msg-col {
@@ -183,6 +186,23 @@ textarea {
 .msg-col h3 {
   margin: 0 0 10px 0;
   text-shadow: 0 0 6px #0ff;
+}
+
+.msg-col.chat {
+  min-width: 0;        /* 🔴 ESSENCIAL para grid */
+  max-width: 100%;
+  overflow: hidden;   /* impede vazamento visual */
+}
+
+.msg-col.chat .chatInput {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+.msg-col.chat .chatInput input {
+  min-width: 0;
+  width: 100%;
 }
 
 .msg-col.players input,

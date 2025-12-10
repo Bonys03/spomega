@@ -166,7 +166,7 @@ textarea {
 
 .msg-master-panel {
   display: grid;
-  grid-template-columns: 0.8fr 1.2fr 2.5fr;
+  grid-template-columns: 220px 260px 1fr;
   gap: 20px;
   margin-top: 20px;
 }
@@ -184,6 +184,17 @@ textarea {
   margin: 0 0 10px 0;
   text-shadow: 0 0 6px #0ff;
 }
+
+.msg-col.players input,
+.msg-col.players button {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.msg-col.players button {
+  margin-top: 6px;
+}
+
 
 #playerChatList,
 #npcList {

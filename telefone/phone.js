@@ -189,7 +189,7 @@ async function pollMessages() {
 
       // renderiza apenas se o chat estiver aberto
       if (currentChat === m.sender) {
-        appendMessage(m.sender, m.message, m.timestamp);
+        appendMessage(m.sender, m.message, m.timestamp, null, m.direction);
       }
     });
 
@@ -236,17 +236,18 @@ async function loadMessageHistory() {
 }
 
 
-function appendMessage(sender, text, timestamp, container) {
+function appendMessage(sender, text, timestamp, container, direction) {
   const box = container || document.getElementById("chatMessages");
 
   if (!box) return;
 
   const msg = document.createElement("div");
-  msg.className = "msg incoming";
+  const isOutgoing = direction === "IN";
+  msg.className = `msg ${isOutgoing ? "outgoing" : "incoming"}`;
 
   const from = document.createElement("div");
   from.className = "msg-sender";
-  from.textContent = sender || "Sistema";
+  from.textContent = isOutgoing ? "Voce" : (sender || "Sistema");
 
   const content = document.createElement("div");
   content.className = "msg-text";
@@ -317,7 +318,7 @@ function renderChatMessages() {
   box.innerHTML = "";
 
   conversations[currentChat].forEach(m => {
-    appendMessage(m.sender, m.message, m.timestamp, box);
+    appendMessage(m.sender, m.message, m.timestamp, box, m.direction);
   });
 
   box.scrollTop = box.scrollHeight;
@@ -335,8 +336,22 @@ async function sendReply() {
 
   document.getElementById("replyText").value = "";
 
-  // ✅ render otimista
-  appendMessage("Você", text, Date.now(), document.getElementById("chatMessages"), "outgoing");
+  const msg = {
+    sender: currentChat,
+    message: text,
+    timestamp: Date.now(),
+    direction: "IN"
+  };
+
+  // render otimista + guarda no historico local
+  if (!conversations[currentChat]) {
+    conversations[currentChat] = [];
+  }
+  conversations[currentChat].push(msg);
+  allMessages.push(msg);
+
+  appendMessage(currentChat, text, msg.timestamp, document.getElementById("chatMessages"), msg.direction);
+  renderConversationList();
 
   await fetch(API_URL, {
     method: "POST",
@@ -348,4 +363,3 @@ async function sendReply() {
     })
   });
 }
-

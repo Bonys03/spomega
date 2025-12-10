@@ -273,20 +273,25 @@ function adminSendMessage(data) {
 }
 
 function phoneSendReply(data) {
-  const pin = String(data.pin);
-  const npc = String(data.npc);
-  const message = String(data.message);
+  const pin = String(data.pin || "").trim();
+  const npc = String(data.npc || "").trim();
+  const message = String(data.message || "").trim();
+
+  if (!pin || !npc || !message) {
+    return jsonResponse({ success: false, error: "invalid_data" });
+  }
 
   const sheet = getPhoneMessagesSheet();
+  const id = sheet.getLastRow();
 
   sheet.appendRow([
-    sheet.getLastRow(),
+    id,
     pin,
-    "Jogador",
-    "IN",
+    npc,        // conversa com o NPC (mantÇ¸m o agrupamento)
+    "IN",       // direÇ·Çåo: jogador -> NPC
     message,
     Date.now(),
-    false
+    false       // ainda nÇø marcado como entregue
   ]);
 
   return jsonResponse({ success: true });

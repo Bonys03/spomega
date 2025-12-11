@@ -552,7 +552,10 @@ body {
   height: 34px;
   border-radius: 50%;
   cursor: pointer;
-  z-index: 5;
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  z-index: 2;
 
   display: flex;
   align-items: center;
@@ -572,14 +575,6 @@ body {
     0 0 12px rgba(255,0,255,0.9),
     inset 0 0 8px rgba(255,0,255,0.4);
   transform: rotate(-15deg);
-}
-
-.btn-home {
-  position: absolute;
-  right: 6px;
-  top: 6px;
-  height: 36px;
-  width: 36px;
 }
 
 .btn-home:hover {

@@ -240,7 +240,7 @@ body {
   inset: 0;
   background: #05080f;
   z-index: 10;
-  padding: 6px;
+  padding: 0 6px 6px;
   border-bottom: none;
   box-shadow: none;
   display: none;
@@ -259,10 +259,11 @@ body {
 .app-layer header {
   position: relative;
   padding: 10px 0 14px;
-  margin-bottom: 6px;
+  margin-bottom: 0;
 
-  border-bottom: 1px solid rgba(0, 255, 255, 0.35);
-  box-shadow: 0 6px 12px rgba(0, 255, 255, 0.18);
+  border-bottom: none;       /* tira a linha */
+  box-shadow: none;          /* tira o brilho/faixa */
+  background: transparent;   /* garante fundo “limpo” */
 }
 
 .app-layer header span {

@@ -171,6 +171,8 @@ setTranslate(screenToX(currentScreen), false);
 screen.addEventListener("pointerdown", e => {
   // se algum app estiver aberto, não permitir swipe
   if (!canSwipe()) return;
+  // não intercepta cliques em itens interativos (apps, botões, inputs)
+  if (e.target.closest(".app, button, input, textarea, #chatInput, #conversationList, #chatMessages")) return;
 
   isDragging = true;
   activePointerId = e.pointerId;

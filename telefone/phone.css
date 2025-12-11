@@ -590,19 +590,33 @@ body {
   top: 50%;
   transform: translateY(-50%);
 
+  width: 34px;
+  height: 34px;
+  border: 1px solid #0ff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   cursor: pointer;
   color: #0ff;
   font-size: 18px;
+  background: transparent;
+
+  box-shadow:
+    0 0 8px rgba(0,255,255,0.6),
+    inset 0 0 6px rgba(0,255,255,0.3);
 
   text-shadow:
     0 0 6px rgba(0,255,255,0.8),
     0 0 12px rgba(0,255,255,0.5);
 
-  transition: transform 0.2s ease, color 0.2s ease;
+  transition: transform 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
 .backBtn:hover {
   color: #ff00ff;
+  border-color: #ff00ff;
   transform: translateY(-50%) rotate(15deg);
 }
 #conversationList {

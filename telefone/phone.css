@@ -383,12 +383,13 @@ body {
 #chatHeader {
   position: relative;
   padding: 12px 0; 
-  border-bottom: 1px solid rgba(0,255,255,0.35);
-  box-shadow: 0 4px 10px rgba(0,255,255,0.18);
+  border-bottom: none;   /* remove a linha */
+  box-shadow: none;      /* remove a faixa brilhante */
+  background: transparent; /* garante fundo limpo */
+  margin-top: 5px;
   text-align: center;
   font-size: 18px;
   font-weight: bold;
-  margin-top: 10px;
 }
 
 

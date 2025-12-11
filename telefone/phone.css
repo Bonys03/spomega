@@ -285,8 +285,10 @@ body {
 .app-layer header .btn-close,
 .app-layer header .btn-home {
   position: absolute;
-  right: 8px;
-  top: 8px;
+  right: 12px;
+  top: 36px;
+  transform: translateY(-50%);
+  margin: 0;
   z-index: 5;
 }
 
@@ -384,6 +386,7 @@ body {
 
 #chatHeader {
   position: relative;
+  padding-top: 32px;
   padding: 12px 0; 
   border-bottom: none;   /* remove a linha */
   box-shadow: none;      /* remove a faixa brilhante */
@@ -394,6 +397,12 @@ body {
   font-weight: bold;
 }
 
+#chatTitle {
+  display: block;
+  margin-top: 4px;
+  font-size: 18px;
+  font-weight: bold;
+}
 
 #chatMessages {
   flex-grow: 1;
@@ -577,9 +586,11 @@ body {
 
 .backBtn {
   position: absolute;
-  left: 8px;
-  top: 8px;
+  left: 12px;
+  top: -20px;
   z-index: 5;
+  transform: translateY(50%);
+  margin: 0;
 }
 
 .btn-home:hover {

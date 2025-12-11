@@ -378,9 +378,15 @@ body {
 
 
 #chatHeader {
-  flex-shrink: 0;
   position: relative;
+  padding: 12px 0; 
+  border-bottom: 1px solid rgba(0,255,255,0.35);
+  box-shadow: 0 4px 10px rgba(0,255,255,0.18);
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
 }
+
 
 #chatMessages {
   flex-grow: 1;
@@ -546,6 +552,7 @@ body {
   height: 34px;
   border-radius: 50%;
   cursor: pointer;
+  z-index: 5;
 
   display: flex;
   align-items: center;
@@ -588,6 +595,7 @@ body {
   position: absolute;
   left: 8px;
   top: 8px;
+  z-index: 5;
   transform: none;
 
   width: 34px;
